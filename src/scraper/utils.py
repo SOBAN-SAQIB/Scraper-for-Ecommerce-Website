@@ -45,8 +45,9 @@ def deduplicate_products(products: List[Dict]) -> List[Dict]:
     
     for product in products:
         url = product.get('product_url', '')
-        if url and url not in seen_urls:
-            seen_urls.add(url)
+        if not url or url not in seen_urls:
+            if url:
+                seen_urls.add(url)
             deduplicated.append(product)
     
     return deduplicated

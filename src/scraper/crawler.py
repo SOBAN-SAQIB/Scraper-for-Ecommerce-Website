@@ -70,28 +70,42 @@ class Crawler:
         Returns:
             List of product dictionaries with 'name' and 'url'
         """
-        try:
-            response = self.session.get(category_url)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            products = []
-            # Find product links
-            product_cards = soup.find_all('div', class_='card')
-            for card in product_cards:
-                link = card.find('a', class_='title')
-                if link:
-                    name = link.get_text().strip()
-                    href = link.get('href', '')
-                    if href and name:
-                        full_url = urljoin(self.base_url, href)
-                        products.append({
-                            'name': name,
-                            'url': full_url
-                        })
-            
-            return products
+        products = []
+        page = 1
+        max_pages = 20  # Limit to prevent infinite loop
         
-        except Exception as e:
-            print(f"Error getting product links from {category_url}: {e}")
-            return []
+        while page <= max_pages:
+            try:
+                if page == 1:
+                    url = category_url
+                else:
+                    url = f"{category_url}?page={page}"
+                
+                response = self.session.get(url)
+                response.raise_for_status()
+                soup = BeautifulSoup(response.content, 'html.parser')
+                
+                # Find product links
+                product_cards = soup.find_all('div', class_='card')
+                if not product_cards:
+                    break  # No more products
+                
+                for card in product_cards:
+                    link = card.find('a', class_='title')
+                    if link:
+                        name = link.get_text().strip()
+                        href = link.get('href', '')
+                        if href and name:
+                            full_url = urljoin(self.base_url, href)
+                            products.append({
+                                'name': name,
+                                'url': full_url
+                            })
+                
+                page += 1
+            
+            except Exception as e:
+                print(f"Error getting product links from {url}: {e}")
+                break
+        
+        return products

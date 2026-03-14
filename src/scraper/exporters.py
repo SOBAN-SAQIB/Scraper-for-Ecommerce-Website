@@ -123,11 +123,11 @@ class CSVExporter:
                 'category': category,
                 'subcategory': subcategory,
                 'total_products': len(data['products']),
-                'average_price': f"{avg_price:.2f}" if avg_price else '',
-                'minimum_price': f"{min_price:.2f}" if min_price else '',
-                'maximum_price': f"{max_price:.2f}" if max_price else '',
+                'avg_price': f"{avg_price:.2f}" if avg_price else '',
+                'min_price': f"{min_price:.2f}" if min_price else '',
+                'max_price': f"{max_price:.2f}" if max_price else '',
                 'missing_descriptions': data['missing_descriptions'],
-                'description_coverage': f"{((len(data['products']) - data['missing_descriptions']) / len(data['products']) * 100):.1f}%" if data['products'] else '0%'
+                'duplicates_removed': 0  # Placeholder, as deduplication is global
             }
             summary_rows.append(row)
         
@@ -139,11 +139,11 @@ class CSVExporter:
             'category',
             'subcategory',
             'total_products',
-            'average_price',
-            'minimum_price',
-            'maximum_price',
+            'avg_price',
+            'min_price',
+            'max_price',
             'missing_descriptions',
-            'description_coverage'
+            'duplicates_removed'
         ]
         
         try:

@@ -44,10 +44,11 @@ def main():
             nav_links = sidebar.find_all('a', class_='nav-link')
             subcat_links = [el for el in nav_links if '/static/' in el.get('href', '') 
                            and 'category' not in el.get('class', [])
-                           and el.get_text().strip().lower() not in ['home', cat_name.lower()]]
+                           and el.get_text().strip().lower() not in ['home', cat_name.lower()]
+                           and f'/{cat_name.lower()}' in el.get('href', '')]
         
         # Get products from first few subcategories
-        for subcat_link in subcat_links[:2]:  # Limit to 2 subcategories per category
+        for subcat_link in subcat_links:  # Limit to 2 subcategories per category
             subcat_name = subcat_link.get_text().strip()
             subcat_href = subcat_link.get('href', '')
             subcat_url = 'https://webscraper.io' + subcat_href if subcat_href.startswith('/') else subcat_href
@@ -61,7 +62,7 @@ def main():
             time.sleep(0.2)
         
         # Add products from main category
-        for prod in products[:5]:  # Limit to 5 initial products to reduce time
+        for prod in products:  # Limit to 5 initial products to reduce time
             products_list.append((cat_name, "", prod['name'], prod['url']))
         
         time.sleep(0.2)
