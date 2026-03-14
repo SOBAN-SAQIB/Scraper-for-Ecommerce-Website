@@ -49,7 +49,7 @@ python --version
 ### 2. Clone or Set Up the Project
 
 ```bash
-cd "c:\Users\AHMED IMTIAZ\Desktop\Quiz no 1 TandT"
+cd "C:\Users\Soban Saqib\Desktop\web_scraper"
 ```
 
 ### 3. Initialize uv Project
